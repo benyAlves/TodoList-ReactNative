@@ -23,7 +23,7 @@ export default class TodoList extends Component {
             </Text>
           </View>
           <View  style={styles.contentWrapper}>
-            <View style={styles.contentHeader}>Content header</View>
+            <View style={styles.contentHeader}><Text>dsdd</Text></View>
             <FlatList
               style={styles.content}
               data={items}
@@ -33,7 +33,7 @@ export default class TodoList extends Component {
               keyExtractor={item => item}
             />
 
-              <View  style={styles.contentFooter}> Content Footer</View>
+              <View  style={styles.contentFooter}><Text>dsdd</Text></View>
 
           </View>
 

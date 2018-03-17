@@ -11,18 +11,29 @@ static navigationOptions = {
   header: null
 }
 
-addItem = () => {
-  this.props.navigation.navigate('AddTask');
+state = {
+  items: [
+    "1. Go to the Store",
+    "2. Get the Milk",
+    "3. Bring it home",
+    "4. Consume it well",
+  ]
 }
-  render(){
 
-    const items = [
-      "1. Go to the Store",
-      "2. Get the Milk",
-      "3. Bring it home",
-      "4. Consume it well",
-    ]
-    const thirdTask = "Bring it home";
+addItem = () => {
+  this.props.navigation.navigate(
+    'AddTask',
+    { saveItem: this.saveItem }
+  );
+}
+
+saveItem = (newTask) => {
+  this.setState({
+    items: [...this.state.items, newTask]
+  })
+}
+
+  render(){
      return(
        <View style={styles.container}>
        <StatusBar barStyle="light-content"/>
@@ -35,7 +46,7 @@ addItem = () => {
             <View style={styles.contentHeader}><Text>dsdd</Text></View>
             <FlatList
               style={styles.content}
-              data={items}
+              data={this.state.items}
               renderItem={(row) => {
                 return <TodoItem title={row.item} />
               }}

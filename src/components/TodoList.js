@@ -1,5 +1,12 @@
 import React, { Component } from 'react';
-import { StyleSheet, Text, View, FlatList, StatusBar } from 'react-native';
+import {
+   StyleSheet,
+   Text,
+   View,
+   FlatList,
+   StatusBar,
+   ActivityIndicator,
+ } from 'react-native';
 import { Button, Text as NBText } from 'native-base';
 
 import TodoItem from './TodoItem';
@@ -12,12 +19,16 @@ static navigationOptions = {
 }
 
 state = {
-  items: [
-    "1. Go to the Store",
-    "2. Get the Milk",
-    "3. Bring it home",
-    "4. Consume it well",
-  ]
+  items: null
+}
+
+componentDidMount(){
+  setTimeout(() => {
+    const tasksFromNetwork = ["fsadf", "dsasd"]
+    this.setState({
+      items: tasksFromNetwork
+    })
+  }, 2000)
 }
 
 addItem = () => {
@@ -43,7 +54,18 @@ saveItem = (newTask) => {
             </Text>
           </View>
           <View  style={styles.contentWrapper}>
-            <View style={styles.contentHeader}><Text>dsdd</Text></View>
+            <View style={styles.contentHeader}>
+              <Text>List Header</Text>
+            </View>
+
+            {
+              !this.state.items && <ActivityIndicator
+                size = "large"
+                color="#2288ee"
+                style={{ marginTop: 20 }}
+              />
+            }
+
             <FlatList
               style={styles.content}
               data={this.state.items}

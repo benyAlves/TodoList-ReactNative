@@ -8,7 +8,7 @@ import {
    ActivityIndicator,
    Image
  } from 'react-native';
-import { Button, Text as NBText } from 'native-base';
+import { Button, Text as NBText, Segment } from 'native-base';
 
 import TodoItem from './TodoItem';
 import CheckImage from '../images/check.png';
@@ -26,6 +26,7 @@ static navigationOptions = {
 }
 
 state = {
+  filter: 'All',
   items: null
 }
 
@@ -66,6 +67,20 @@ items('DELETE', {id})
   })
 }
 
+filteredItems =()=>{
+  if(this.state.filter === 'Todo'){
+    return this.state.items.filter(i =>{
+      return !i.completed
+    })
+  }
+  if(this.state.filter === 'Complete'){
+    return this.state.items.filter(i =>{
+      return i.completed
+    })
+  }
+  return this.state.items
+}
+
   render(){
 
 
@@ -79,7 +94,27 @@ items('DELETE', {id})
          </Text>
        </View>
        <View  style={styles.contentWrapper}>
-         <View style={styles.contentHeader}><Text>Content header</Text></View>
+         <View style={styles.contentHeader}>
+         <Segment style={{backgroundColor:'#228Bee'}}>
+         <Button
+            first={true}
+            active={this.state.filter === 'All'}
+            onPress={()=>this.setState({filter:'All'})}
+         >
+           <NBText>All</NBText>
+         </Button>
+         <Button active={this.state.filter === 'Todo'}
+         onPress={()=>this.setState({filter:'Todo'})}>
+           <NBText>Todo</NBText>
+         </Button>
+         <Button last={true}
+          active={this.state.filter === 'Complete'}
+          onPress={()=>this.setState({filter:'Complete'})}
+          >
+           <NBText>Complete</NBText>
+         </Button>
+         </Segment>
+         </View>
 
          {
            !this.state.items && <ActivityIndicator
@@ -91,7 +126,7 @@ items('DELETE', {id})
 
          <FlatList
            style={styles.content}
-           data={this.state.items}
+           data={this.filteredItems()}
            renderItem={(row) => {
                      return <TodoItem
                        item ={row.item}
@@ -122,8 +157,7 @@ const styles = StyleSheet.create({
     paddingTop:20,
     alignSelf: 'stretch',
     backgroundColor: '#228Bee',
-    borderBottomWidth: 1,
-    borderColor: '#0066cc',
+
   },
   headerText: {
     fontSize: 20,
@@ -142,7 +176,8 @@ const styles = StyleSheet.create({
       borderBottomWidth: 1,
       borderColor: '#aaa',
       alignItems: 'center',
-      justifyContent: 'center'
+      justifyContent: 'center',
+      backgroundColor: '#228Bee',
   },
   contentFooter:{
     padding: 20,

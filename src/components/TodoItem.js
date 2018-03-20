@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { StyleSheet, Text, View,
   TouchableOpacity } from 'react-native';
+  import { Icon} from 'native-base';
 
 
 export default class TodoItem extends Component {
@@ -13,6 +14,14 @@ export default class TodoItem extends Component {
       )
 
   }
+
+
+  deleteTodo = () => {
+    this.props.deleteTodo(
+        this.props.item.id
+      )
+
+  }
   render(){
     const item = this.props.item;
 
@@ -20,12 +29,17 @@ export default class TodoItem extends Component {
     <TouchableOpacity onPress={this.toggleTodo}
        style={styles.itemButton}
       >
-
+      <Icon name={item.completed ? 'checkmark-circle': 'radio-button-off'}/>
       <Text style={[styles.item,{
       opacity:(item.completed ? 0.5 : 1),
       textDecorationLine : (item.completed ? 'line-through' : 'none')
     }]}>{item.task}</Text>
-
+      <TouchableOpacity onPress={this.deleteTodo}>
+        <Icon name={'trash'}
+            style={{
+              color: 'red',
+              paddingRight: 10}}/>
+      </TouchableOpacity>
     </TouchableOpacity>
 
    );
@@ -35,10 +49,14 @@ export default class TodoItem extends Component {
 
  const styles = StyleSheet.create({
    item: {
-     padding:10
+     padding:10,
+     flex: 1
    },
    itemButton: {
      borderBottomWidth: 1,
-     borderColor: '#ccc'
+     borderColor: '#ccc',
+     flexDirection:'row',
+     alignItems:'center',
+     paddingLeft: 10
    }
  });

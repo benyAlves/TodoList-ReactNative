@@ -6,16 +6,22 @@ import {
    FlatList,
    StatusBar,
    ActivityIndicator,
+   Image
  } from 'react-native';
 import { Button, Text as NBText } from 'native-base';
 
 import TodoItem from './TodoItem';
+import CheckImage from '../images/check.png';
 
 
 export default class TodoList extends Component {
 
 static navigationOptions = {
-  header: null
+  header: null,
+  tabBarIcon:({tintColor}) => {
+    <Image style={[styles.icon, { tintColor }]} source={CheckImage}/>
+  },
+  tabBarLabel: 'List'
 }
 
 state = {
@@ -74,6 +80,11 @@ updateTodo = (id, completed) =>{
     this.setState({ items: json })
   })
 }
+
+deleteTodo = (id) =>{
+
+}
+
   render(){
 
 
@@ -103,7 +114,8 @@ updateTodo = (id, completed) =>{
            renderItem={(row) => {
                      return <TodoItem
                        item ={row.item}
-                       updateTodo={this.updateTodo} />
+                       updateTodo={this.updateTodo}
+                       deleteTodo={this.deleteTodo} />
                    }}
            keyExtractor={item => item.id.toString()}
          />
@@ -155,5 +167,9 @@ const styles = StyleSheet.create({
     padding: 20,
     justifyContent: 'flex-end',
     flexDirection: 'row'
+  },
+  icon:{
+    height: 24,
+    resizeMode: 'contain'
   }
 });

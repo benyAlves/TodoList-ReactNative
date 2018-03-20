@@ -30,11 +30,13 @@ const TabNav = TabNavigator({
   About: { screen: About }},{
     tabBarPosition: 'bottom',
     tabBarOptions: {
-      activeTintColor: '#0066cc',
+       activeTintColor: '#0066cc',
        inactiveTintColor: 'gray',
       style: {
-        backgroundColor: 'white',
-      }
+        backgroundColor: '#EEEEEE',
+      },
+      showIcon: true,
+      showLabel: true
     }
 })
 

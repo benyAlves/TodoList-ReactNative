@@ -12,6 +12,7 @@ import { Button, Text as NBText } from 'native-base';
 
 import TodoItem from './TodoItem';
 import CheckImage from '../images/check.png';
+import { items } from '../share/api';
 
 
 export default class TodoList extends Component {
@@ -45,44 +46,24 @@ addItem = () => {
 }
 
 saveItem = (newTask) => {
-  const headers = new Headers()
-  headers.append('Accept', 'application/json')
-  headers.append('Content-Type', 'application/json')
-
-  fetch("http://10.42.0.1:3000/items.json", {
-    method: 'POST',
-    headers,
-    body: JSON.stringify({
-      task: newTask
-    })
-  })
-  .then(resp => resp.json())
+items('POST', {task: newTask})
   .then(json => {
     this.setState({ items: json })
   })
 }
 
 updateTodo = (id, completed) =>{
-  const headers = new Headers()
-  headers.append('Accept', 'application/json')
-  headers.append('Content-Type', 'application/json')
-
-  fetch("http://10.42.0.1:3000/items.json", {
-    method: 'PUT',
-    headers,
-    body: JSON.stringify({
-      id,
-      completed
-    })
-  })
-  .then(resp => resp.json())
+items('PUT', {id, completed})
   .then(json => {
     this.setState({ items: json })
   })
 }
 
 deleteTodo = (id) =>{
-
+items('DELETE', {id})
+  .then(json => {
+    this.setState({ items: json })
+  })
 }
 
   render(){

@@ -22,13 +22,13 @@ state = {
   items: null
 }
 
+
 componentDidMount(){
-  setTimeout(() => {
-    const tasksFromNetwork = ["fsadf", "dsasd"]
-    this.setState({
-      items: tasksFromNetwork
-    })
-  }, 2000)
+  fetch("http://10.42.0.1:3000/items.json")
+  .then(resp => resp.json())
+  .then(items => {
+    this.setState({ items })
+  })
 }
 
 addItem = () => {
@@ -39,50 +39,75 @@ addItem = () => {
 }
 
 saveItem = (newTask) => {
+  const task = {
+    id: new Date().getTime(),
+    task: newTask,
+    completed: false
+  }
   this.setState({
-    items: [...this.state.items, newTask]
+    items: [...this.state.items, task]
   })
+
 }
 
+updateTodo = (id, completed) =>{
+  const headers = new Headers()
+  headers.append('Accept', 'application/json')
+  headers.append('Content-Type', 'application/json')
+
+  fetch("http://10.42.0.1:3000/items.json", {
+    method: 'PUT',
+    headers,
+    body: JSON.stringify({
+      id,
+      completed
+    })
+  })
+  .then(resp => resp.json())
+  .then(json => {
+    this.setState({ items: json })
+  })
+}
   render(){
+
+
      return(
-       <View style={styles.container}>
-       <StatusBar barStyle="light-content"/>
-          <View style={styles.header}>
-            <Text style={styles.headerText}>
-              Todo List
-            </Text>
-          </View>
-          <View  style={styles.contentWrapper}>
-            <View style={styles.contentHeader}>
-              <Text>List Header</Text>
+
+      <View style={styles.container}>
+    <StatusBar barStyle="light-content"/>
+       <View style={styles.header}>
+         <Text style={styles.headerText}>
+           Todo List
+         </Text>
+       </View>
+       <View  style={styles.contentWrapper}>
+         <View style={styles.contentHeader}><Text>Content header</Text></View>
+
+         {
+           !this.state.items && <ActivityIndicator
+             size = "large"
+             color="#2288ee"
+             style={{ marginTop: 20 }}
+           />
+         }
+
+         <FlatList
+           style={styles.content}
+           data={this.state.items}
+           renderItem={(row) => {
+                     return <TodoItem
+                       item ={row.item}
+                       updateTodo={this.updateTodo} />
+                   }}
+           keyExtractor={item => item.id}
+         />
+   </View>
+
+            <View  style={styles.contentFooter}>
+              <Button onPress={this.addItem}>
+                <NBText>Add Item</NBText>
+              </Button>
             </View>
-
-            {
-              !this.state.items && <ActivityIndicator
-                size = "large"
-                color="#2288ee"
-                style={{ marginTop: 20 }}
-              />
-            }
-
-            <FlatList
-              style={styles.content}
-              data={this.state.items}
-              renderItem={(row) => {
-                return <TodoItem title={row.item} />
-              }}
-              keyExtractor={item => item}
-            />
-
-              <View  style={styles.contentFooter}>
-                <Button onPress={this.addItem}>
-                  <NBText>Add Item</NBText>
-                </Button>
-              </View>
-
-          </View>
-
        </View>
      );
   }

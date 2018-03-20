@@ -105,7 +105,7 @@ updateTodo = (id, completed) =>{
                        item ={row.item}
                        updateTodo={this.updateTodo} />
                    }}
-           keyExtractor={item => item.id}
+           keyExtractor={item => item.id.toString()}
          />
    </View>
 

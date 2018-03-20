@@ -39,15 +39,21 @@ addItem = () => {
 }
 
 saveItem = (newTask) => {
-  const task = {
-    id: new Date().getTime(),
-    task: newTask,
-    completed: false
-  }
-  this.setState({
-    items: [...this.state.items, task]
-  })
+  const headers = new Headers()
+  headers.append('Accept', 'application/json')
+  headers.append('Content-Type', 'application/json')
 
+  fetch("http://10.42.0.1:3000/items.json", {
+    method: 'POST',
+    headers,
+    body: JSON.stringify({
+      task: newTask
+    })
+  })
+  .then(resp => resp.json())
+  .then(json => {
+    this.setState({ items: json })
+  })
 }
 
 updateTodo = (id, completed) =>{
